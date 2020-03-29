@@ -1,6 +1,6 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-const ReactDOM = require('react-dom')
+// const ReactDOM = require('react-dom')
 // const ReactMarkdown = require('react-markdown')
 const ReactMarkdown = require('react-markdown/with-html')
 
@@ -8,7 +8,11 @@ export default function ListIssue(props) {
     console.log(props)
     let htmlListIssue = props.issues.map((el, index) => {
         return (
-            <div className="row mt-4" key={index}>
+            <div onClick={() => {
+                props.setView('everyIssue');
+                // look in el (issue9 object), see where is the issue id in this object
+                props.setSelectedIssue(el) 
+            }  } className="row mt-4" key={index}>
                 <div className="col-lg-9">
                     <div className="card w-100 h-100">
                         <div className="card-header">
@@ -40,7 +44,7 @@ export default function ListIssue(props) {
     })
     return (
         <div >
-            <button onClick={() => props.openModal()} type="button" class="btn btn-success">New Issue</button>
+            <button onClick={() => props.openModal()} type="button" className="btn btn-success">New Issue</button>
             {htmlListIssue}
         </div>
     )

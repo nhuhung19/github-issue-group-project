@@ -4,27 +4,27 @@ import './App.css';
 import NavBarSearch from './components/NavBarSearch'
 import Repositories from './components/Repostories'
 import ListIssue from './components/ListIssue'
-import Pagination from "react-js-pagination";
+import EveryIssue from './components/EveryIssue';
+// import Pagination from "react-js-pagination";
 import Modal from 'react-modal';
-const ReactDOM = require('react-dom')
+// const ReactDOM = require('react-dom')
 // const ReactMarkdown = require('react-markdown')
 // const ReactMarkdown = require('react-markdown/with-html')
 // const React = require('react')
-
-
-
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 
 function App() {
     const [token, setToken] = useState(null)
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [selectedIssue, setSelectedIssue] = useState (null)
     let [view, setView] = useState('landing')
     let [searchTerm, setSearchTerm] = useState('')
     let [page, setPage] = useState(1)
     let [repos, setRepos] = useState([])
     let [issues, setIssues] = useState([])
     let [total, setTotal] = useState(null)
+    
 
     useEffect(() => {
         const existingToken = localStorage.getItem('token');
@@ -78,7 +78,30 @@ function App() {
         let result = await respone.json()
         console.log('listIssue', result)
         setIssues(issues.concat(result))
-        console.log(issues)
+        // console.log(issues)
+    }
+
+    let openModal = () => {
+        setIsOpen(true);
+    }
+
+    let closeModal = () => {
+        setIsOpen(false);
+    }
+
+    const showEveryView = () => {
+        if (view==='listIssue'){
+            return (
+                <EveryIssue 
+                issues={issues} 
+                openModal={openModal} 
+                modalIsOpen={modalIsOpen}
+                closeModal={closeModal}
+
+                />
+            )
+
+        }
     }
 
     const showView = () => {
@@ -87,7 +110,17 @@ function App() {
         }
         else if (view === 'listIssue') {
             return (
-                <ListIssue issues={issues} openModal={openModal}/>
+                <ListIssue issues={issues} 
+                setView={setView} 
+                openModal={openModal}
+                setSelectedIssue = {setSelectedIssue}
+                />
+            )
+        } else if (view === 'everyIssue') {
+            return (
+                <EveryIssue 
+                    selectedIssue = {selectedIssue}
+                />
             )
         }
     }
@@ -102,7 +135,7 @@ function App() {
                 <div>
                     <h3>Total Result:{total} </h3>
                     <Repositories repos={repos} fetchReposIssue={fetchReposIssue} />
-                    <Pagination
+                    {/* <Pagination
                         itemClass="page-item"
                         linkClass="page-link"
                         activePage={page}
@@ -110,18 +143,13 @@ function App() {
                         totalItemsCount={total}
                         pageRangeDisplayed={5}
                         onChange={handlePageChange}
-                    />
+                    /> */}
                 </div>
             )
         }
     }
-    let openModal = () => {
-        setIsOpen(true);
-    }
+    
 
-    let closeModal = () => {
-        setIsOpen(false);
-    }
 
     console.log(searchTerm)
     // console.log(token)
