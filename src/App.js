@@ -120,6 +120,7 @@ function App() {
             return (
                 <EveryIssue 
                     selectedIssue = {selectedIssue}
+                    token = {token}
                 />
             )
         }
